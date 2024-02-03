@@ -1,6 +1,9 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
+import { UserRole } from './decorators/roles.decorator';
+import { Role } from './enums/role.enum';
 
+@UserRole(Role.Admin)
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}

@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  password  String
+  firstName String?
+  lastName  String?
+  role      String
+  customer  Customer? @relation("Customer")
+}
+
+model Customer {
+  id               Int       @id @default(autoincrement())
+  favoriteStations Station[] @relation("UserFavoriteStations")
+  favoriteTrains   Train[]   @relation("UserFavoriteTrains")
+  userId           Int       @unique
+  user             User      @relation("Customer", fields: [userId], references: [id])
+}
+
+model Station {
+  id                Int        @id @default(autoincrement())
+  name              String
+  city              String
+  oblast            String
+  image             String?
+  numberOfPlatforms Int
+  users             Customer[] @relation("UserFavoriteStations")
+}
+
+model Train {
+  id           Int            @id @default(autoincrement())
+  name         String
+  color        String
+  users        Customer[]     @relation("UserFavoriteTrains")
+  TrainStation TrainStation[]
+}
+
+model TrainStation {
+  id            Int      @id @default(autoincrement())
+  departureDate DateTime
+  arrivalDate   DateTime
+  trainId       Int
+  train         Train    @relation(fields: [trainId], references: [id])
+}

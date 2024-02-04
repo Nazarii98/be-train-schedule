@@ -8,9 +8,17 @@ import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './guards/roles.guard';
 import { AppService } from './app.service';
 import { AuthGuard } from './guards/auth.guard';
+import { TrainsModule } from './trains/trains.module';
+import { StationsModule } from './stations/stations.module';
 
 @Module({
-  imports: [PrismaModule, AuthModule, UsersModule],
+  imports: [
+    PrismaModule,
+    AuthModule,
+    UsersModule,
+    TrainsModule,
+    StationsModule,
+  ],
   controllers: [AppController],
   providers: [
     AppService,

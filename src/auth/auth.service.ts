@@ -10,7 +10,8 @@ import { SignUpInput } from 'src/types/signUpInput.interface';
 import { SignUpResponse } from 'src/types/signUpResponse.interface';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Role } from 'src/enums/role.enum';
-import { SignInDto } from './dto/signInDto';
+import { SignInDto } from '../dto/signIn.dto';
+import { SignInResponse } from 'src/types/signInResponse.interface';
 
 @Injectable()
 export class AuthService {
@@ -20,7 +21,7 @@ export class AuthService {
     private prismaService: PrismaService,
   ) {}
 
-  async signIn(signInDto: SignInDto): Promise<any> {
+  async signIn(signInDto: SignInDto): Promise<SignInResponse> {
     const user = await this.usersService.findOne(signInDto.email);
 
     if (!user) {
@@ -46,7 +47,7 @@ export class AuthService {
       access_token: await this.jwtService.signAsync(payload, {
         expiresIn: '10m',
       }),
-      refreshToken: await this.jwtService.signAsync(payload),
+      refresh_token: await this.jwtService.signAsync(payload),
     };
   }
 
@@ -70,11 +71,15 @@ export class AuthService {
 
     console.log('userCreate', user);
 
-    const payload = { sub: user.id };
+    const payload = {
+      sub: user.id,
+      email: user.email,
+      role: user.role,
+    };
 
     return {
-      accessToken: await this.jwtService.signAsync(payload),
-      refreshToken: await this.jwtService.signAsync(payload, {
+      access_token: await this.jwtService.signAsync(payload),
+      refresh_token: await this.jwtService.signAsync(payload, {
         expiresIn: '10m',
       }),
     };

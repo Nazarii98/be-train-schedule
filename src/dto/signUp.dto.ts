@@ -1,4 +1,4 @@
-import { SignInDto } from './signInDto';
+import { SignInDto } from './signIn.dto';
 
 export class SignUpDto implements SignInDto {
   email: string;

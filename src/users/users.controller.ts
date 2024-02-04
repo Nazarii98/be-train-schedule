@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtService } from '@nestjs/jwt';
-import { UserDto } from './dto/user.dto';
+import { UserDto } from '../dto/user.dto';
 
 @Controller('users')
 export class UsersController {

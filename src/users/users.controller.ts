@@ -26,7 +26,7 @@ export class UsersController {
 
     try {
       const decodedToken = await this.jwtService.verifyAsync(token, {
-        secret: process.env.JWT_ACCESS_SECRET,
+        secret: process.env.JWT_SECRET,
       });
 
       console.log(decodedToken);

@@ -22,9 +22,17 @@ export class AuthService {
 
   async signIn(signInDto: SignInDto): Promise<any> {
     const user = await this.usersService.findOne(signInDto.email);
-    const hashedPassword = await bcrypt.hash(signInDto.password, 15);
 
-    if (hashedPassword !== user.password) {
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+
+    const passwordsMatch = await bcrypt.compare(
+      signInDto.password,
+      user.password,
+    );
+
+    if (!passwordsMatch) {
       throw new UnauthorizedException();
     }
 
@@ -33,7 +41,6 @@ export class AuthService {
       email: user.email,
       role: user.role,
     };
-    console.log(payload);
 
     return {
       access_token: await this.jwtService.signAsync(payload, {

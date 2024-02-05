@@ -1,18 +1,31 @@
-import { Body, Controller, Get } from '@nestjs/common';
-import { Public } from 'src/decorators/public.decorator';
-import { PaginationDto } from 'src/dto/pagination.dto';
+import { Controller, Get, Query } from '@nestjs/common';
 import { StationsService } from './stations.service';
-import { GetStationResponse } from 'src/types/getStation.response';
+import { Prisma, Station } from '@prisma/client';
+import { PaginatedResult } from 'src/providers/paginator';
 
-@Public()
 @Controller('stations')
 export class StationsController {
   constructor(private stationsService: StationsService) {}
 
   @Get('all')
-  getStations(
-    @Body() pagination: PaginationDto,
-  ): Promise<GetStationResponse[]> {
-    return this.stationsService.getStation(pagination);
+  async getStations(
+    @Query()
+    {
+      where,
+      orderBy,
+      page,
+    }: {
+      where: Prisma.StationWhereInput;
+      orderBy: Prisma.StationOrderByWithRelationInput;
+      page: number;
+    },
+  ): Promise<PaginatedResult<Station>> {
+    const result = await this.stationsService.findMany({
+      where,
+      orderBy,
+      page,
+    });
+
+    return result;
   }
 }

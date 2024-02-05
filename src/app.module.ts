@@ -10,6 +10,9 @@ import { AppService } from './app.service';
 import { AuthGuard } from './guards/auth.guard';
 import { TrainsModule } from './trains/trains.module';
 import { StationsModule } from './stations/stations.module';
+import { ScheduleController } from './schedule/schedule.controller';
+import { ScheduleService } from './schedule/schedule.service';
+import { ScheduleModule } from './schedule/schedule.module';
 
 @Module({
   imports: [
@@ -18,8 +21,9 @@ import { StationsModule } from './stations/stations.module';
     UsersModule,
     TrainsModule,
     StationsModule,
+    ScheduleModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, ScheduleController],
   providers: [
     AppService,
     {
@@ -30,6 +34,7 @@ import { StationsModule } from './stations/stations.module';
       provide: APP_GUARD,
       useClass: RolesGuard,
     },
+    ScheduleService,
   ],
 })
 export class AppModule {}

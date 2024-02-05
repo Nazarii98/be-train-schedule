@@ -29,8 +29,6 @@ export class UsersController {
         secret: process.env.JWT_SECRET,
       });
 
-      console.log(decodedToken);
-
       const userEmail = decodedToken.email;
 
       return this.usersService.findOne(userEmail);

@@ -1,7 +1,8 @@
 import { PrismaClient } from '@prisma/client';
 import { usersData } from './users';
 import { stationsData } from './stations';
-import { currencyData } from './trains';
+import { trainsData } from './trains';
+import { scheduleData } from './schedule';
 
 const prisma = new PrismaClient();
 
@@ -20,10 +21,16 @@ async function main() {
     console.log(`Created currency: ${currency.name}`);
   });
 
-  currencyData.forEach(async (data) => {
+  trainsData.forEach(async (data) => {
     const currency = await prisma.train.create({ data });
 
     console.log(`Created currency: ${currency.name}`);
+  });
+
+  scheduleData.forEach(async (data) => {
+    const currency = await prisma.schedule.create({ data });
+
+    console.log(`Created currency: ${currency.id}`);
   });
 }
 main()

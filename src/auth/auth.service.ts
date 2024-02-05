@@ -69,8 +69,6 @@ export class AuthService {
       },
     });
 
-    console.log('userCreate', user);
-
     const payload = {
       sub: user.id,
       email: user.email,

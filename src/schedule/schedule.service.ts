@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, Station } from '@prisma/client';
+import { Schedule } from '@prisma/client';
+import { GetScheduleDto } from 'src/dto/getSchedule.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
   PaginateFunction,
@@ -10,20 +11,13 @@ import {
 const paginate: PaginateFunction = paginator({ perPage: 10 });
 
 @Injectable()
-export class StationsService {
+export class ScheduleService {
   constructor(private prismaServise: PrismaService) {}
 
-  findMany({
-    where,
-    orderBy,
-    page,
-  }: {
-    where?: Prisma.StationWhereInput;
-    orderBy?: Prisma.StationOrderByWithRelationInput;
-    page?: number;
-  }): Promise<PaginatedResult<Station>> {
+  findMany(dto: GetScheduleDto): Promise<PaginatedResult<Schedule>> {
+    const { where, orderBy, page } = dto;
     return paginate(
-      this.prismaServise.station,
+      this.prismaServise.schedule,
       {
         where,
         orderBy,
@@ -32,5 +26,9 @@ export class StationsService {
         page,
       },
     );
+  }
+
+  delete(id: number): Promise<Schedule> {
+    return this.prismaServise.schedule.delete({ where: { id } });
   }
 }

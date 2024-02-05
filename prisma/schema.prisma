@@ -26,13 +26,16 @@ model Customer {
 }
 
 model Station {
-  id                Int        @id @default(autoincrement())
+  id                Int            @id @default(autoincrement())
   name              String
   city              String
   oblast            String
   image             String?
   numberOfPlatforms Int
-  users             Customer[] @relation("UserFavoriteStations")
+  users             Customer[]     @relation("UserFavoriteStations")
+  trainStation      TrainStation[]
+  departureSchedule Schedule[]     @relation("DepartureSchedule")
+  arrivalSchedule   Schedule[]     @relation("ArrivalSchedule")
 }
 
 model Train {
@@ -40,13 +43,28 @@ model Train {
   name         String
   color        String
   users        Customer[]     @relation("UserFavoriteTrains")
-  TrainStation TrainStation[]
+  trainStation TrainStation[]
+  schedule     Schedule[]     @relation("Schedule")
 }
 
 model TrainStation {
   id            Int      @id @default(autoincrement())
   departureDate DateTime
   arrivalDate   DateTime
+  stationId     Int
+  station       Station  @relation(fields: [stationId], references: [id])
   trainId       Int
   train         Train    @relation(fields: [trainId], references: [id])
+}
+
+model Schedule {
+  id                 Int      @id @default(autoincrement())
+  departureDate      DateTime
+  departureStation   Station  @relation("DepartureSchedule", fields: [departureStationId], references: [id], onDelete: NoAction, onUpdate: Cascade)
+  departureStationId Int
+  arrivalDate        DateTime
+  arrivalStation     Station  @relation("ArrivalSchedule", fields: [arrivalStationId], references: [id], onDelete: NoAction, onUpdate: Cascade)
+  arrivalStationId   Int
+  trainId            Int
+  train              Train    @relation("Schedule", fields: [trainId], references: [id])
 }

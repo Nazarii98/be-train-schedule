@@ -1,7 +1,7 @@
 import { TrainCreateDto } from 'src/dto/trainCreateInput.dto';
 import { TrainColors } from '../../src/enums/trainColors';
 
-export const currencyData: TrainCreateDto[] = [
+export const trainsData: TrainCreateDto[] = [
   {
     name: 'Azov',
     color: TrainColors.Blue,

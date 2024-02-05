@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { Schedule } from '@prisma/client';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { Prisma, Schedule } from '@prisma/client';
 import { GetScheduleDto } from 'src/dto/getSchedule.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
@@ -12,12 +12,12 @@ const paginate: PaginateFunction = paginator({ perPage: 10 });
 
 @Injectable()
 export class ScheduleService {
-  constructor(private prismaServise: PrismaService) {}
+  constructor(private prismaService: PrismaService) {}
 
   findMany(dto: GetScheduleDto): Promise<PaginatedResult<Schedule>> {
     const { where, orderBy, page } = dto;
     return paginate(
-      this.prismaServise.schedule,
+      this.prismaService.schedule,
       {
         where,
         orderBy,
@@ -28,7 +28,35 @@ export class ScheduleService {
     );
   }
 
+  create(scheduleData: Prisma.ScheduleCreateInput): Promise<Schedule> {
+    return this.prismaService.schedule.create({
+      data: scheduleData,
+    });
+  }
+
+  update(
+    id: number,
+    scheduleData: Prisma.ScheduleUpdateInput,
+  ): Promise<Schedule> {
+    return this.prismaService.schedule.update({
+      where: { id },
+      data: scheduleData,
+    });
+  }
+
   delete(id: number): Promise<Schedule> {
-    return this.prismaServise.schedule.delete({ where: { id } });
+    return this.prismaService.schedule.delete({ where: { id } });
+  }
+
+  async findById(id: number): Promise<Schedule | null> {
+    const schedule = await this.prismaService.schedule.findUnique({
+      where: { id },
+    });
+
+    if (!schedule) {
+      throw new NotFoundException(`Schedule with ID ${id} not found`);
+    }
+
+    return schedule;
   }
 }

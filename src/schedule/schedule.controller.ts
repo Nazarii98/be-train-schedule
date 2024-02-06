@@ -36,6 +36,7 @@ export class ScheduleController {
     }
   }
 
+  @UserRole(Role.Admin)
   @Post('create')
   async createSchedule(
     @Body() createDto: Prisma.ScheduleUncheckedCreateInput,
@@ -50,7 +51,7 @@ export class ScheduleController {
     }
   }
 
-  @UserRole(Role.User)
+  @UserRole(Role.Admin)
   @Put('update')
   async updateSchedule(
     @Body() updateDto: Prisma.ScheduleUncheckedUpdateInput,
@@ -63,6 +64,7 @@ export class ScheduleController {
     }
   }
 
+  @UserRole(Role.Admin)
   @Delete('delete')
   async deleteSchedule(@Query('id') id: string): Promise<void> {
     try {

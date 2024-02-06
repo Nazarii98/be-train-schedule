@@ -1,0 +1,10 @@
+version: '3.5'
+
+services:
+  be-train-schedule:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: be-train-schedule
+    ports:
+      - '8080:8080'

@@ -42,12 +42,9 @@ export class ScheduleService {
     });
   }
 
-  update(
-    id: number,
-    scheduleData: Prisma.ScheduleUpdateInput,
-  ): Promise<Schedule> {
+  update(scheduleData: Prisma.ScheduleUncheckedUpdateInput): Promise<Schedule> {
     return this.prismaService.schedule.update({
-      where: { id },
+      where: { id: +scheduleData.id },
       data: scheduleData,
     });
   }

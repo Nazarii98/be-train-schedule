@@ -14,12 +14,14 @@ import { ScheduleService } from './schedule.service';
 import { PaginatedResult } from 'src/providers/paginator';
 import { Public } from 'src/decorators/public.decorator';
 import { GetScheduleDto } from 'src/dto/getSchedule.dto';
+import { UserRole } from 'src/decorators/roles.decorator';
+import { Role } from 'src/enums/role.enum';
 
-@Public()
 @Controller('schedule')
 export class ScheduleController {
   constructor(private scheduleService: ScheduleService) {}
 
+  @Public()
   @Get('all')
   async getSchedule(
     @Query() dto: GetScheduleDto,
@@ -48,16 +50,16 @@ export class ScheduleController {
     }
   }
 
-  @Put('update/:id')
+  @UserRole(Role.User)
+  @Put('update')
   async updateSchedule(
-    @Query('id') id: string,
-    @Body() updateDto: Prisma.ScheduleUpdateInput,
+    @Body() updateDto: Prisma.ScheduleUncheckedUpdateInput,
   ): Promise<Schedule> {
     try {
-      const updatedSchedule = await this.scheduleService.update(+id, updateDto);
+      const updatedSchedule = await this.scheduleService.update(updateDto);
       return updatedSchedule;
     } catch (error) {
-      throw new NotFoundException(`Schedule with ID ${id} not found`);
+      throw new NotFoundException(`Schedule with ID ${updateDto.id} not found`);
     }
   }
 

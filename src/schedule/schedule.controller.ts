@@ -36,7 +36,7 @@ export class ScheduleController {
 
   @Post('create')
   async createSchedule(
-    @Body() createDto: Prisma.ScheduleCreateInput,
+    @Body() createDto: Prisma.ScheduleUncheckedCreateInput,
   ): Promise<Schedule> {
     try {
       const createdSchedule = await this.scheduleService.create(createDto);

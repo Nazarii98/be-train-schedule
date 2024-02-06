@@ -28,9 +28,17 @@ export class ScheduleService {
     );
   }
 
-  create(scheduleData: Prisma.ScheduleCreateInput): Promise<Schedule> {
+  create(scheduleData: Prisma.ScheduleUncheckedCreateInput): Promise<Schedule> {
+    const data = {
+      departureDate: scheduleData.departureDate,
+      departureStationId: scheduleData.departureStationId,
+      arrivalDate: scheduleData.arrivalDate,
+      arrivalStationId: scheduleData.arrivalStationId,
+      trainId: scheduleData.trainId,
+    };
+
     return this.prismaService.schedule.create({
-      data: scheduleData,
+      data,
     });
   }
 

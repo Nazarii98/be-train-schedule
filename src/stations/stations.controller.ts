@@ -2,11 +2,13 @@ import { Controller, Get, Query } from '@nestjs/common';
 import { StationsService } from './stations.service';
 import { Prisma, Station } from '@prisma/client';
 import { PaginatedResult } from 'src/providers/paginator';
+import { Public } from 'src/decorators/public.decorator';
 
 @Controller('stations')
 export class StationsController {
   constructor(private stationsService: StationsService) {}
 
+  @Public()
   @Get('all')
   async getStations(
     @Query()
